@@ -91,4 +91,18 @@ app.get('/buy', async (req, res) => {
     }
 });
 
+app.delete('/buy/:id', async (req, res) => {
+    try {
+        const buyId = req.params.id;
+        const deletedBuy = await Buy.findOneAndDelete({ _id: buyId });
+        if (!deletedBuy) {
+            return res.status(404).json({ message: 'buy not found' });
+        }
+        res.json({ message: 'buy deleted successfully', deletedBuy });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = (app);
