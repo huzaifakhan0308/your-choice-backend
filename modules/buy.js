@@ -15,7 +15,11 @@ const Buy = mongoose.Schema({
     },
     phone: {
         required: true,
-        type: Number,
+        type: String,
+    },
+    additional: {
+        required: true,
+        type: String,
     },
     item: {
         type: Array,
