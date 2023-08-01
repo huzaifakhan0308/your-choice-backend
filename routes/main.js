@@ -3,8 +3,6 @@ const app = express()
 const Item = require('../modules/item.js')
 const Buy = require('../modules/buy.js')
 
-const hardcodedPassword = 'yourchoice321';
-
 const checkPassword = (req, res, next) => {
     const password = req.body.password;
 
@@ -12,7 +10,7 @@ const checkPassword = (req, res, next) => {
         return res.status(400).json({ message: 'Password is required' });
     }
 
-    if (password === hardcodedPassword) {
+    if (password === process.env.PASSWORD) {
         next();
     } else {
         return res.status(401).json({ message: 'Invalid password' });
@@ -21,14 +19,17 @@ const checkPassword = (req, res, next) => {
 
 app.post('/items', checkPassword, async (req, res) => {
     try {
-        const { title, img, price, off, colors, gender } = req.body;
+        const { title, img, price, off, colors, sizes, gender, type, quantity } = req.body;
         const items = new Item({
             title: title,
             img: img,
             price: price,
             off: off,
             colors: colors,
+            sizes: sizes,
             gender: gender,
+            type: type,
+            quantity: quantity,
         });
         await items.save();
         res.json(items);
@@ -64,14 +65,19 @@ app.delete('/items/:id', checkPassword, async (req, res) => {
 
 app.post('/buy', async (req, res) => {
     try {
-        const { name, address, city, phone, additional, item } = req.body;
+        const { name, address, email, city, phone, color, size, state, zip, quantity, productId } = req.body;
         const buy = new Buy({
             name: name,
             address: address,
+            email: email,
             city: city,
             phone: phone,
-            additional: additional,
-            item: item,
+            color: color,
+            size: size,
+            state: state,
+            zip: zip,
+            quantity: quantity,
+            productId: productId
         });
         await buy.save();
         res.json(buy);
@@ -91,7 +97,7 @@ app.get('/buy', async (req, res) => {
     }
 });
 
-app.delete('/buy/:id', async (req, res) => {
+app.delete('/buy/:id', checkPassword, async (req, res) => {
     try {
         const buyId = req.params.id;
         const deletedBuy = await Buy.findOneAndDelete({ _id: buyId });

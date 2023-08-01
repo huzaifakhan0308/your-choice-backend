@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const cors = require('cors');
 const main = require('./routes/main.js');
-const uri = 'mongodb+srv://huzaifa031252khan:huzaifa031252khan@cluster0.4kws2yo.mongodb.net/'
+const uri = process.env.URI
 
 const connect = async (params) => {
     try {

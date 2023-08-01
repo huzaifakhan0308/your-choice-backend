@@ -5,11 +5,10 @@ const Items = mongoose.Schema({
         required: true,
         type: String,
     },
-    img: [{
+    img: {
         required: true,
-        type: String,
-        default: ''
-    }],
+        type: Array,
+    },
     price: {
         type: Number,
         default: ''
@@ -18,12 +17,24 @@ const Items = mongoose.Schema({
         type: Number,
         default: ''
     },
-    colors: [{
-        type: String,
-        required: true
-    }],
+    colors: {
+        required: true,
+        type: Array,
+    },
+    sizes: {
+        required: true,
+        type: Array,
+    },
     gender: {
         type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
         required: true
     },
 }, { timestamps: true });

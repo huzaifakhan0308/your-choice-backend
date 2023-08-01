@@ -9,6 +9,9 @@ const Buy = mongoose.Schema({
         required: true,
         type: String,
     },
+    email: {
+        type: String,
+    },
     city: {
         required: true,
         type: String,
@@ -17,13 +20,28 @@ const Buy = mongoose.Schema({
         required: true,
         type: String,
     },
-    additional: {
+    color: {
         required: true,
         type: String,
     },
-    item: {
-        type: Array,
-        default: []
+    size: {
+        required: true,
+        type: Number,
+    },
+    state: {
+        required: true,
+        type: String,
+    },
+    zip: {
+        type: String,
+    },
+    quantity: {
+        required: true,
+        type: Number,
+    },
+    productId: {
+        required: true,
+        type: Number,
     }
 }, { timestamps: true });
 
