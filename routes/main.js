@@ -41,13 +41,20 @@ app.post('/items', checkPassword, async (req, res) => {
 
 app.get('/items', async (req, res) => {
     try {
-        const items = await Item.find();
-        res.json(items);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const items = await Item.find().skip(skip).limit(limit);
+        const totalCount = await Item.countDocuments();
+
+        res.json({ items, totalCount });
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
     }
 });
+
 
 app.delete('/items/:id', checkPassword, async (req, res) => {
     try {

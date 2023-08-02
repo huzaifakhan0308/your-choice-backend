@@ -41,7 +41,7 @@ const Buy = mongoose.Schema({
     },
     productId: {
         required: true,
-        type: Number,
+        type: String,
     }
 }, { timestamps: true });
 
