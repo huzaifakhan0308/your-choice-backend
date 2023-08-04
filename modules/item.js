@@ -25,7 +25,7 @@ const Items = mongoose.Schema({
         required: true,
         type: Array,
     },
-    gender: {
+    adults: {
         type: String,
         required: true
     },

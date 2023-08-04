@@ -19,7 +19,7 @@ const checkPassword = (req, res, next) => {
 
 app.post('/items', checkPassword, async (req, res) => {
     try {
-        const { title, img, price, off, colors, sizes, gender, type, quantity } = req.body;
+        const { title, img, price, off, colors, sizes, adults, type, quantity } = req.body;
         const items = new Item({
             title: title,
             img: img,
@@ -27,7 +27,7 @@ app.post('/items', checkPassword, async (req, res) => {
             off: off,
             colors: colors,
             sizes: sizes,
-            gender: gender,
+            adults: adults,
             type: type,
             quantity: quantity,
         });
@@ -42,11 +42,19 @@ app.post('/items', checkPassword, async (req, res) => {
 app.get('/items', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 5;
         const skip = (page - 1) * limit;
 
-        const items = await Item.find().skip(skip).limit(limit);
-        const totalCount = await Item.countDocuments();
+        const filters = {};
+        if (req.query.type) {
+            filters.type = req.query.type;
+        }
+        if (req.query.adults) {
+            filters.adults = req.query.adults;
+        }
+
+        const items = await Item.find(filters).skip(skip).limit(limit);
+        const totalCount = await Item.countDocuments(filters);
 
         res.json({ items, totalCount });
     } catch (error) {
