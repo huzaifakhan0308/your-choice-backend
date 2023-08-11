@@ -2,6 +2,13 @@ const express = require('express')
 const app = express()
 const Item = require('../modules/item.js')
 const Buy = require('../modules/buy.js')
+const cloudinary = require('cloudinary').v2
+
+cloudinary.config({
+    cloud_name: 'dagonvt6i',
+    api_key: '738111489311934',
+    api_secret: 'Jm8TzJctZp5XyW6TF8JF_9CWP1U'
+});
 
 const checkPassword = (req, res, next) => {
     const password = req.body.password;
@@ -42,7 +49,7 @@ app.post('/items', checkPassword, async (req, res) => {
 app.get('/items', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 5;
+        const limit = parseInt(req.query.limit) || 20;
         const skip = (page - 1) * limit;
 
         const filters = {};
@@ -63,6 +70,22 @@ app.get('/items', async (req, res) => {
     }
 });
 
+app.get('/items/:id', async (req, res) => {
+    const itemId = req.params.id; // Get the item ID from the URL parameter
+
+    try {
+        const item = await Item.findById(itemId);
+
+        if (!item) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
+        res.json(item);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+});
 
 app.delete('/items/:id', checkPassword, async (req, res) => {
     try {
