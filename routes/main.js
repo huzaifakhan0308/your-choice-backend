@@ -2,13 +2,6 @@ const express = require('express')
 const app = express()
 const Item = require('../modules/item.js')
 const Buy = require('../modules/buy.js')
-const cloudinary = require('cloudinary').v2
-
-cloudinary.config({
-    cloud_name: 'dagonvt6i',
-    api_key: '738111489311934',
-    api_secret: 'Jm8TzJctZp5XyW6TF8JF_9CWP1U'
-});
 
 const checkPassword = (req, res, next) => {
     const password = req.body.password;
@@ -71,7 +64,7 @@ app.get('/items', async (req, res) => {
 });
 
 app.get('/items/:id', async (req, res) => {
-    const itemId = req.params.id; // Get the item ID from the URL parameter
+    const itemId = req.params.id;
 
     try {
         const item = await Item.findById(itemId);
