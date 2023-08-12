@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const Item = require('../modules/item.js')
 const Buy = require('../modules/buy.js')
+require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
 
 const checkPassword = (req, res, next) => {
-    const password = req.body.password;
+    const password = req.body.password || req.query.password;
 
     if (!password) {
         return res.status(400).json({ message: 'Password is required' });
@@ -52,6 +54,9 @@ app.get('/items', async (req, res) => {
         if (req.query.adults) {
             filters.adults = req.query.adults;
         }
+        if (req.query.someOff) {
+            filters.off = { $ne: null };
+        }
 
         const items = await Item.find(filters).skip(skip).limit(limit);
         const totalCount = await Item.countDocuments(filters);
@@ -83,6 +88,14 @@ app.get('/items/:id', async (req, res) => {
 app.delete('/items/:id', checkPassword, async (req, res) => {
     try {
         const itemId = req.params.id;
+        const imageUrls = req.query.imageUrls.split(',');
+        for (const publicId of imageUrls) {
+            const parts = publicId.split('/');
+            const id = parts[parts.length - 1].split('.')[0]
+            await cloudinary.uploader
+                .destroy(id)
+                .then(result => console.log(result));
+        }
         const deletedItem = await Item.findOneAndDelete({ _id: itemId });
         if (!deletedItem) {
             return res.status(404).json({ message: 'Item not found' });
