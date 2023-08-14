@@ -42,6 +42,9 @@ const Buy = mongoose.Schema({
     productId: {
         required: true,
         type: String,
+    },
+    confirm: {
+        type: Boolean,
     }
 }, { timestamps: true });
 

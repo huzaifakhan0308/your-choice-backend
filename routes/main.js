@@ -89,6 +89,7 @@ app.delete('/items/:id', checkPassword, async (req, res) => {
     try {
         const itemId = req.params.id;
         const imageUrls = req.query.imageUrls.split(',');
+        console.log(req.params.id);
         for (const publicId of imageUrls) {
             const parts = publicId.split('/');
             const id = parts[parts.length - 1].split('.')[0]
@@ -121,7 +122,8 @@ app.post('/buy', async (req, res) => {
             state: state,
             zip: zip,
             quantity: quantity,
-            productId: productId
+            productId: productId,
+            confirm: false
         });
         await buy.save();
         res.json(buy);
@@ -135,6 +137,26 @@ app.get('/buy', async (req, res) => {
     try {
         const buy = await Buy.find();
         res.json(buy);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.put('/buy/:id/confirm', checkPassword, async (req, res) => {
+    try {
+        const buyId = req.params.id;
+        const updatedBuy = await Buy.findByIdAndUpdate(
+            buyId,
+            { confirm: true },
+            { new: true }
+        );
+
+        if (!updatedBuy) {
+            return res.status(404).json({ message: 'Buy not found' });
+        }
+
+        res.json(updatedBuy);
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
