@@ -177,4 +177,8 @@ app.delete('/buy/:id', checkPassword, async (req, res) => {
     }
 });
 
+app.get('/keep-alive', (req, res) => {
+    res.json({ message: 'Server is alive!' });
+});
+
 module.exports = (app);
