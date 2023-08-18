@@ -57,8 +57,9 @@ app.get('/items', async (req, res) => {
         if (req.query.someOff) {
             filters.off = { $ne: null };
         }
+        const sort = { createdAt: -1 };
 
-        const items = await Item.find(filters).skip(skip).limit(limit);
+        const items = await Item.find(filters).sort(sort).skip(skip).limit(limit);
         const totalCount = await Item.countDocuments(filters);
 
         res.json({ items, totalCount });
