@@ -26,7 +26,7 @@ const Buy = mongoose.Schema({
     },
     size: {
         required: true,
-        type: Number,
+        type: String,
     },
     state: {
         required: true,
