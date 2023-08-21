@@ -39,7 +39,7 @@ const Buy = mongoose.Schema({
         required: true,
         type: Number,
     },
-    productId: {
+    productImg: {
         required: true,
         type: String,
     },
