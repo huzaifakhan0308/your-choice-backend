@@ -136,7 +136,8 @@ app.post('/buy', async (req, res) => {
 
 app.get('/buy', async (req, res) => {
     try {
-        const buy = await Buy.find();
+        const sort = { createdAt: -1 };
+        const buy = await Buy.find().sort(sort);
         res.json(buy);
     } catch (error) {
         console.error(error);
