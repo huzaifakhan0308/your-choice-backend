@@ -111,7 +111,7 @@ app.delete('/items/:id', checkPassword, async (req, res) => {
 
 app.post('/buy', async (req, res) => {
     try {
-        const { name, address, email, city, phone, color, size, state, zip, quantity, productId } = req.body;
+        const { name, address, email, city, phone, color, size, state, zip, quantity, productImg } = req.body;
         const buy = new Buy({
             name: name,
             address: address,
@@ -123,7 +123,7 @@ app.post('/buy', async (req, res) => {
             state: state,
             zip: zip,
             quantity: quantity,
-            productId: productId,
+            productImg: productImg,
             confirm: false
         });
         await buy.save();
